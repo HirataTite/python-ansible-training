@@ -1,0 +1,5 @@
+
+vars:
+  project_packages:
+    - python-pip
+    - docker.io

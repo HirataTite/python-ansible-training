@@ -1,0 +1,15 @@
+---
+
+- name: destroying environment
+  hosts: ans_server
+  gather_facts: False
+  tasks:
+    - name: Removing main installed packages
+      become: true
+      apt:
+        name: "{{ project_packages }}"
+        state: absent
+      vars:
+        project_packages:
+          - python-pip
+          - docker.io

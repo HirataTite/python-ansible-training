@@ -1,0 +1,44 @@
+---
+
+- name: Setting up My Application
+  hosts: training_server
+  gather_facts: False
+  tasks:
+    - name: cleaning work directory
+      file:
+        path: ~/app
+        state: absent
+
+    - name: copy Application into the server
+      copy:
+        src: py_project
+        dest: ~/app
+
+    - name: prune unused containers and images
+      docker_prune:
+        containers: yes
+        images: yes
+
+    - name: build docker image
+      command: docker build -t flask-app ~/app/py_project/
+
+#    - name: Building Docker Image
+#      docker_image:
+#        name: flask-app
+#        build:
+#          path: ~/app/py_project/
+#          args:
+#            log_volume: /var/log/flask-image
+#            listen_port: 5000
+#          pull: no
+#        source: build
+#        state: present
+#
+    - name: Starting container
+      docker_container:
+        name: flask-container
+        image: flask-app
+        state: started
+        ports:
+          - "5000:5000"
+

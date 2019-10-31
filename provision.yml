@@ -1,0 +1,20 @@
+---
+
+- name: provision machine with docker and python environment
+  hosts: ans_server
+  gather_facts: False
+  tasks:
+#    - name: updating packages
+#      become: true
+#      apt:
+#        upgrade: yes
+#        update_cache: yes
+
+    - name: installing main project packages
+      become: true
+      apt:
+        name: "{{ project_packages }}"
+      vars:
+        project_packages:
+          - python-pip
+          - docker.io
